@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>img/AddNewPatient.png</file>
+        <file>img/AddNewAppointment.png</file>
+    </qresource>
+</RCC>

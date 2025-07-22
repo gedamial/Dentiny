@@ -1,0 +1,69 @@
+#include "mainwindow.h"
+#include "./ui_mainwindow.h"
+#include "addpatientwindow.h"
+#include "appointmentdao.h"
+#include "appointment.h"
+#include "appointmentitem.h"
+#include "ui_appointmentitem.h"
+#include "patient.h"
+#include "patientdao.h"
+#include "addappointmentwindow.h"
+
+#include <QMessageBox>
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+    , ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::on_btnNewPatient_clicked()
+{
+    AddPatientWindow wndw;
+    wndw.exec(); // automatically sets setModal to true
+}
+
+
+void MainWindow::on_calendarWidget_selectionChanged()
+{
+    AppointmentDAO appDao;
+    PatientDAO patientDao;
+
+    QString selectedDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
+    QList<Appointment> apps = appDao.getAppointmentsFromDateSorted(selectedDate);
+
+    QWidget* container = new QWidget();                    // Container for the AppointmentItems
+    QVBoxLayout* layout = new QVBoxLayout(container);      // Layout to stack them vertically
+    layout->setAlignment(Qt::AlignTop);
+    container->setLayout(layout);
+
+    for(int i = 0; i < apps.size(); ++i)
+    {
+        AppointmentItem* appItem = new AppointmentItem;
+        Patient appPatient = patientDao.getPatientFromId(apps[i].fk_patient);
+
+        qDebug() << appPatient.cf;
+        appItem->ui->lblHeader_Time->setText(apps[i].datetime.split(" ")[1]);
+        appItem->ui->lblHeader_Name->setText(appPatient.name);
+        appItem->ui->lblHeader_Surname->setText(appPatient.surname);
+        appItem->ui->lblHeader_Reason->setText(apps[i].reason);
+        appItem->ui->lblHeader_Status->setText(apps[i].getStatusText());
+
+        layout->addWidget(appItem);  // Add to the layout
+    }
+
+    ui->scrollArea->setWidget(container);
+}
+
+void MainWindow::on_btnNewAppointment_clicked()
+{
+    AddAppointmentWindow wndw;
+    wndw.exec(); // automatically sets setModal to true
+}
+
