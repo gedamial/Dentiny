@@ -2,17 +2,22 @@
 #define APPOINTMENT_H
 #include <QString>
 
+enum class AppointmentStatus
+{
+    Created = 0,
+    Completed = 1,
+    Canceled = 2
+};
+
 class Appointment
 {
 public:
     Appointment();
 
-    QString getStatusText();
-
     unsigned int id;
     QString datetime;
     QString reason;
-    int status;
+    int fk_status;
     int fk_patient;
 };
 

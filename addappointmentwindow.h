@@ -12,7 +12,7 @@ class AddAppointmentWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddAppointmentWindow(QWidget *parent = nullptr);
+    explicit AddAppointmentWindow(const QDate defaultDate, QWidget *parent = nullptr);
     ~AddAppointmentWindow();
 
 private slots:

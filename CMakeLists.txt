@@ -34,6 +34,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         appointment.h appointment.cpp
         appointmentdao.h appointmentdao.cpp
         addappointmentwindow.h addappointmentwindow.cpp addappointmentwindow.ui
+        editappointmentwindow.h editappointmentwindow.cpp editappointmentwindow.ui
+        status.h status.cpp
+        statusdao.h statusdao.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Dentiny APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

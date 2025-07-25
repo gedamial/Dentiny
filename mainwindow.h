@@ -24,6 +24,8 @@ private slots:
 
     void on_btnNewAppointment_clicked();
 
+    void UpdateAppointmentsList();
+
 private:
     Ui::MainWindow *ui;
 };

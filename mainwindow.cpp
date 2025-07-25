@@ -7,6 +7,8 @@
 #include "ui_appointmentitem.h"
 #include "patient.h"
 #include "patientdao.h"
+#include "status.h"
+#include "statusdao.h"
 #include "addappointmentwindow.h"
 
 #include <QMessageBox>
@@ -16,6 +18,13 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // Add header label before the list of Appointments
+    AppointmentItem* lblAppointmentHeader = new AppointmentItem;
+    ui->bottomLayout->insertWidget(0, lblAppointmentHeader);
+
+    // Make sure the list appears on start-up
+    UpdateAppointmentsList();
 }
 
 MainWindow::~MainWindow()
@@ -32,9 +41,22 @@ void MainWindow::on_btnNewPatient_clicked()
 
 void MainWindow::on_calendarWidget_selectionChanged()
 {
+    UpdateAppointmentsList();
+}
+
+void MainWindow::on_btnNewAppointment_clicked()
+{
+    AddAppointmentWindow wndw(ui->calendarWidget->selectedDate());
+    wndw.exec(); // automatically sets setModal to true
+}
+
+void MainWindow::UpdateAppointmentsList()
+{
     AppointmentDAO appDao;
     PatientDAO patientDao;
+    StatusDAO statusDao;
 
+    // Get appointments of the selected date
     QString selectedDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
     QList<Appointment> apps = appDao.getAppointmentsFromDateSorted(selectedDate);
 
@@ -45,25 +67,18 @@ void MainWindow::on_calendarWidget_selectionChanged()
 
     for(int i = 0; i < apps.size(); ++i)
     {
-        AppointmentItem* appItem = new AppointmentItem;
+        AppointmentItem* appItem = new AppointmentItem(apps[i].id);
         Patient appPatient = patientDao.getPatientFromId(apps[i].fk_patient);
 
-        qDebug() << appPatient.cf;
         appItem->ui->lblHeader_Time->setText(apps[i].datetime.split(" ")[1]);
         appItem->ui->lblHeader_Name->setText(appPatient.name);
         appItem->ui->lblHeader_Surname->setText(appPatient.surname);
         appItem->ui->lblHeader_Reason->setText(apps[i].reason);
-        appItem->ui->lblHeader_Status->setText(apps[i].getStatusText());
+        appItem->ui->lblHeader_Status->setText(statusDao.getNameFromId(apps[i].fk_status));
 
         layout->addWidget(appItem);  // Add to the layout
     }
 
     ui->scrollArea->setWidget(container);
-}
-
-void MainWindow::on_btnNewAppointment_clicked()
-{
-    AddAppointmentWindow wndw;
-    wndw.exec(); // automatically sets setModal to true
 }
 

@@ -4,11 +4,12 @@
 #include "patient.h"
 #include "appointmentdao.h"
 #include "appointment.h"
+#include "statusdao.h"
+#include "status.h"
 #include <QList>
 #include <QMessageBox>
 
-AddAppointmentWindow::AddAppointmentWindow(QWidget *parent)
-    : QDialog(parent), ui(new Ui::AddAppointmentWindow)
+AddAppointmentWindow::AddAppointmentWindow(const QDate defaultDate, QWidget *parent) : QDialog(parent), ui(new Ui::AddAppointmentWindow)
 {
     ui->setupUi(this);
 
@@ -22,8 +23,18 @@ AddAppointmentWindow::AddAppointmentWindow(QWidget *parent)
         ui->cmbPatient->addItem(displayText);
     }
 
-    // Pre-load datetime widget with current datetime
-    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+    // Pre-load datetime widget
+    ui->dateTimeEdit->setDate(defaultDate);
+    ui->dateTimeEdit->setTime(QTime::currentTime());
+
+    // Pre-load with appointment statuses
+    StatusDAO statusDao;
+    QList<Status> statuses = statusDao.getAllStatuses();
+
+    for(int i = 0; i < statuses.size(); ++i)
+    {
+        ui->cmbStatus->addItem(statuses[i].name);
+    }
 }
 
 AddAppointmentWindow::~AddAppointmentWindow()
@@ -57,14 +68,14 @@ void AddAppointmentWindow::on_btnConfirm_clicked()
     else
     {
         PatientDAO patientDao;
-        QString patientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
-        Patient p = patientDao.getPatientFromCf(patientCf);
+        QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
+        Patient selectedPatient = patientDao.getPatientFromCf(selectedPatientCf);
 
         Appointment newApp;
         newApp.datetime = ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd hh:mm");
         newApp.reason = ui->txtReason->toPlainText();
-        newApp.status = 0;
-        newApp.fk_patient = p.id;
+        newApp.fk_status = ui->cmbStatus->currentIndex();
+        newApp.fk_patient = selectedPatient.id;
 
         AppointmentDAO appDao;
         appDao.insertAppointment(newApp);
