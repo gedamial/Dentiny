@@ -1,7 +1,6 @@
 #include "addpatientwindow.h"
 #include "ui_addpatientwindow.h"
-#include "patientdao.h"
-#include "placedao.h"
+#include "model.h"
 #include <QMessageBox>
 
 AddPatientWindow::AddPatientWindow(QWidget *parent)
@@ -9,9 +8,10 @@ AddPatientWindow::AddPatientWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    Model m;
+
     // Pre-load birthplace combobox
-    PlaceDAO placeDao;
-    QList<Place> places = placeDao.getAllPlaces();
+    QList<Place> places = m.getAllPlaces();
 
     for(int i = 0; i< places.count(); ++i)
     {
@@ -32,8 +32,7 @@ AddPatientWindow::~AddPatientWindow()
 
 bool AddPatientWindow::InsertPatient()
 {
-    PatientDAO patientDao;
-    PlaceDAO placeDao;
+    Model m;
     Patient toInsert;
 
     toInsert.cf = ui->txtFiscalCode->text();
@@ -46,7 +45,7 @@ bool AddPatientWindow::InsertPatient()
     toInsert.birthday = birthdayStr;
 
     QString belfiore = ui->cmbBirthplace->currentText().split("-")[0].trimmed();
-    int fk_birthplace = placeDao.getIdFromBelfiore(belfiore);
+    int fk_birthplace = m.getPlaceIdFromBelfiore(belfiore);
 
     if(fk_birthplace < 0)
     {
@@ -62,7 +61,7 @@ bool AddPatientWindow::InsertPatient()
     toInsert.email = ui->txtEmail->text();
     toInsert.phone = ui->txtPhone->text();
 
-    return patientDao.insertPatient(toInsert);
+    return m.insertPatient(toInsert);
 }
 
 void AddPatientWindow::on_btnInsert_clicked()

@@ -19,7 +19,7 @@ Appointment AppointmentDAO::LoadFromQueryRow(const QSqlQuery& query)
     return app;
 }
 
-Appointment AppointmentDAO::getAppointmentFromId(unsigned int id)
+Appointment AppointmentDAO::getAppointmentFromId(int id)
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
     QSqlQuery query(db);

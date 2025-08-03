@@ -38,7 +38,7 @@ Place PlaceDAO::getPlaceFromId(unsigned int id)
     return newPlace;
 }
 
-int PlaceDAO::getIdFromBelfiore(const QString &belfiore)
+int PlaceDAO::getPlaceIdFromBelfiore(const QString &belfiore)
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
 

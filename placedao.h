@@ -9,7 +9,7 @@ public:
     PlaceDAO();
 
     Place getPlaceFromId(unsigned int id);
-    int getIdFromBelfiore(const QString& belfiore);
+    int getPlaceIdFromBelfiore(const QString& belfiore);
     QList<Place> getAllPlaces();
 };
 

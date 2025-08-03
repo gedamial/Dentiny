@@ -45,6 +45,19 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="btnNewPatient">
           <property name="text">
            <string/>
@@ -70,6 +83,40 @@
           <property name="icon">
            <iconset resource="resources.qrc">
             <normaloff>:/resources/img/AddNewAppointment.png</normaloff>:/resources/img/AddNewAppointment.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnAddNewRecord">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/img/AddNewRecord.png</normaloff>:/resources/img/AddNewRecord.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnSetPassword">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="resources.qrc">
+            <normaloff>:/resources/img/SetPassword.png</normaloff>:/resources/img/SetPassword.png</iconset>
           </property>
           <property name="iconSize">
            <size>
@@ -109,7 +156,7 @@
            <x>0</x>
            <y>0</y>
            <width>618</width>
-           <height>258</height>
+           <height>166</height>
           </rect>
          </property>
         </widget>
@@ -134,11 +181,23 @@
     </property>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionPatient"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuView"/>
   </widget>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionPatient">
+   <property name="text">
+    <string>Patient</string>
    </property>
   </action>
  </widget>

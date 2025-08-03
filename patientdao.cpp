@@ -91,7 +91,7 @@ QList<Patient> PatientDAO::getAllPatients()
     return patients;
 }
 
-QList<Patient> PatientDAO::getAllPatientsSorted()
+QList<Patient> PatientDAO::getAllPatientsSortedBySurname()
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
 

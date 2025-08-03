@@ -26,6 +26,10 @@ private slots:
 
     void UpdateAppointmentsList();
 
+    void on_btnAddNewRecord_clicked();
+
+    void on_btnSetPassword_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

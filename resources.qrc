@@ -2,5 +2,7 @@
     <qresource prefix="/resources">
         <file>img/AddNewPatient.png</file>
         <file>img/AddNewAppointment.png</file>
+        <file>img/AddNewRecord.png</file>
+        <file>img/SetPassword.png</file>
     </qresource>
 </RCC>

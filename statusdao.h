@@ -9,7 +9,7 @@ class StatusDAO
 public:
     StatusDAO();
 
-    QString getNameFromId(int id);
+    QString getStatusNameFromId(int id);
     QList<Status> getAllStatuses();
 };
 

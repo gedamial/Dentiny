@@ -1,15 +1,14 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "addpatientwindow.h"
-#include "appointmentdao.h"
 #include "appointment.h"
 #include "appointmentitem.h"
 #include "ui_appointmentitem.h"
 #include "patient.h"
-#include "patientdao.h"
-#include "status.h"
-#include "statusdao.h"
 #include "addappointmentwindow.h"
+#include "addreportwindow.h"
+#include "setpasswordwindow.h"
+#include "model.h"
 
 #include <QMessageBox>
 
@@ -38,7 +37,6 @@ void MainWindow::on_btnNewPatient_clicked()
     wndw.exec(); // automatically sets setModal to true
 }
 
-
 void MainWindow::on_calendarWidget_selectionChanged()
 {
     UpdateAppointmentsList();
@@ -52,13 +50,11 @@ void MainWindow::on_btnNewAppointment_clicked()
 
 void MainWindow::UpdateAppointmentsList()
 {
-    AppointmentDAO appDao;
-    PatientDAO patientDao;
-    StatusDAO statusDao;
+    Model m;
 
     // Get appointments of the selected date
     QString selectedDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
-    QList<Appointment> apps = appDao.getAppointmentsFromDateSorted(selectedDate);
+    QList<Appointment> apps = m.getAppointmentsFromDateSorted(selectedDate);
 
     QWidget* container = new QWidget();                    // Container for the AppointmentItems
     QVBoxLayout* layout = new QVBoxLayout(container);      // Layout to stack them vertically
@@ -68,17 +64,29 @@ void MainWindow::UpdateAppointmentsList()
     for(int i = 0; i < apps.size(); ++i)
     {
         AppointmentItem* appItem = new AppointmentItem(apps[i].id);
-        Patient appPatient = patientDao.getPatientFromId(apps[i].fk_patient);
+        Patient appPatient = m.getPatientFromId(apps[i].fk_patient);
 
         appItem->ui->lblHeader_Time->setText(apps[i].datetime.split(" ")[1]);
         appItem->ui->lblHeader_Name->setText(appPatient.name);
         appItem->ui->lblHeader_Surname->setText(appPatient.surname);
         appItem->ui->lblHeader_Reason->setText(apps[i].reason);
-        appItem->ui->lblHeader_Status->setText(statusDao.getNameFromId(apps[i].fk_status));
+        appItem->ui->lblHeader_Status->setText(m.getStatusNameFromId(apps[i].fk_status));
 
         layout->addWidget(appItem);  // Add to the layout
     }
 
     ui->scrollArea->setWidget(container);
+}
+
+void MainWindow::on_btnAddNewRecord_clicked()
+{
+    AddReportWindow wndw;
+    wndw.exec();
+}
+
+void MainWindow::on_btnSetPassword_clicked()
+{
+    SetPasswordWindow wndw;
+    wndw.exec();
 }
 

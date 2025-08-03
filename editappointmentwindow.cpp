@@ -1,21 +1,19 @@
 #include "editappointmentwindow.h"
 #include "ui_editappointmentwindow.h"
-#include "appointmentdao.h"
 #include "patient.h"
-#include "patientdao.h"
 #include "status.h"
-#include "statusdao.h"
+#include "model.h"
 
 EditAppointmentWindow::EditAppointmentWindow(unsigned int appointmentID, QWidget *parent) : QDialog(parent), ui(new Ui::EditAppointmentWindow), appointmentID{appointmentID}
 {
     ui->setupUi(this);
 
-    AppointmentDAO appDao;
-    associatedAppointment = appDao.getAppointmentFromId(appointmentID);
+    Model m;
+
+    associatedAppointment = m.getAppointmentFromId(appointmentID);
 
     // Load patient combobox
-    PatientDAO patientDao;
-    QList<Patient> patients = patientDao.getAllPatientsSorted();
+    QList<Patient> patients = m.getAllPatientsSortedBySurname();
     int currentPatientIndex;
 
     for(int i = 0; i < patients.size(); ++i)
@@ -37,8 +35,7 @@ EditAppointmentWindow::EditAppointmentWindow(unsigned int appointmentID, QWidget
     ui->txtReason->setPlainText(associatedAppointment.reason);
 
     // Load appointment statuses
-    StatusDAO statusDao;
-    QList<Status> statuses = statusDao.getAllStatuses();
+    QList<Status> statuses = m.getAllStatuses();
 
     for(int i = 0; i < statuses.size(); ++i)
     {
@@ -61,12 +58,11 @@ void EditAppointmentWindow::on_btnCancel_clicked()
 
 void EditAppointmentWindow::on_btnSave_clicked()
 {
-    PatientDAO patientDao;
-    AppointmentDAO appDao;
+    Model m;
 
     // Get the id of the selected Patient
     QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
-    Patient selectedPatient = patientDao.getPatientFromCf(selectedPatientCf);
+    Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
 
     Appointment newApp;
     newApp.id = associatedAppointment.id;
@@ -75,7 +71,7 @@ void EditAppointmentWindow::on_btnSave_clicked()
     newApp.reason = ui->txtReason->toPlainText();
     newApp.fk_status = ui->cmbStatus->currentIndex();
 
-    appDao.UpdateAppointmentWithId(appointmentID, newApp);
+    m.updateAppointmentWithId(appointmentID, newApp);
 
     close();
 }

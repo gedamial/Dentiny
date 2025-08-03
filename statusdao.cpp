@@ -6,7 +6,7 @@
 
 StatusDAO::StatusDAO() {}
 
-QString StatusDAO::getNameFromId(int id)
+QString StatusDAO::getStatusNameFromId(int id)
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
     QSqlQuery query(db);

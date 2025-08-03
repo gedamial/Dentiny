@@ -12,7 +12,7 @@ public:
     Patient getPatientFromId(unsigned int id);
     Patient getPatientFromCf(const QString& cf);
     QList<Patient> getAllPatients();
-    QList<Patient> getAllPatientsSorted();
+    QList<Patient> getAllPatientsSortedBySurname();
 };
 
 #endif // PATIENTDAO_H

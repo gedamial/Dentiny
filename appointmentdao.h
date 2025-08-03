@@ -10,7 +10,7 @@ public:
     AppointmentDAO();
 
     Appointment LoadFromQueryRow(const QSqlQuery& query);
-    Appointment getAppointmentFromId(unsigned int id);
+    Appointment getAppointmentFromId(int id);
     bool insertAppointment(const Appointment& app);
     QList<Appointment> getAppointmentsFromDateSorted(QString date);
     void UpdateAppointmentWithId(unsigned int id, const Appointment& newAppointment);

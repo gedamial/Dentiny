@@ -37,6 +37,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         editappointmentwindow.h editappointmentwindow.cpp editappointmentwindow.ui
         status.h status.cpp
         statusdao.h statusdao.cpp
+        authenticationwindow.h authenticationwindow.cpp authenticationwindow.ui
+        model.h model.cpp
+        addreportwindow.h addreportwindow.cpp addreportwindow.ui
+        setpasswordwindow.h setpasswordwindow.cpp setpasswordwindow.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Dentiny APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
