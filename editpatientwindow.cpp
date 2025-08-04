@@ -1,10 +1,10 @@
-#include "viewpatientwindow.h"
-#include "ui_viewpatientwindow.h"
+#include "editpatientwindow.h"
+#include "ui_editpatientwindow.h"
 #include "model.h"
 #include "patient.h"
 #include <QMessageBox>
 
-ViewPatientWindow::ViewPatientWindow(QWidget *parent) : QDialog(parent), ui(new Ui::ViewPatientWindow)
+EditPatientWindow::EditPatientWindow(QWidget *parent) : QDialog(parent), ui(new Ui::EditPatientWindow)
 {
     ui->setupUi(this);
 
@@ -41,17 +41,17 @@ ViewPatientWindow::ViewPatientWindow(QWidget *parent) : QDialog(parent), ui(new 
     SetFieldsEnabled(false);
 }
 
-ViewPatientWindow::~ViewPatientWindow()
+EditPatientWindow::~EditPatientWindow()
 {
     delete ui;
 }
 
-void ViewPatientWindow::on_btnCancel_clicked()
+void EditPatientWindow::on_btnCancel_clicked()
 {
     close();
 }
 
-void ViewPatientWindow::on_cmbPatient_currentIndexChanged(int index)
+void EditPatientWindow::on_cmbPatient_currentIndexChanged(int index)
 {
     ui->chkboxEditMode->setCheckable(true);
 
@@ -73,7 +73,7 @@ void ViewPatientWindow::on_cmbPatient_currentIndexChanged(int index)
     ui->txtPhone->setText(selectedPatient.phone);
 }
 
-void ViewPatientWindow::on_chkboxEditMode_checkStateChanged(const Qt::CheckState& checkState)
+void EditPatientWindow::on_chkboxEditMode_checkStateChanged(const Qt::CheckState& checkState)
 {
     if(checkState == Qt::CheckState::Checked)
     {
@@ -86,7 +86,7 @@ void ViewPatientWindow::on_chkboxEditMode_checkStateChanged(const Qt::CheckState
     }
 }
 
-void ViewPatientWindow::SetFieldsEnabled(bool enabled)
+void EditPatientWindow::SetFieldsEnabled(bool enabled)
 {
     ui->txtName->setReadOnly(!enabled);
     ui->txtSurname->setReadOnly(!enabled);
@@ -100,7 +100,7 @@ void ViewPatientWindow::SetFieldsEnabled(bool enabled)
     ui->txtPhone->setReadOnly(!enabled);
 }
 
-void ViewPatientWindow::on_btnOK_clicked()
+void EditPatientWindow::on_btnOK_clicked()
 {
     if(ui->cmbPatient->currentIndex() < 0)
     {

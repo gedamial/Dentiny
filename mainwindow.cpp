@@ -8,7 +8,7 @@
 #include "addappointmentwindow.h"
 #include "addreportwindow.h"
 #include "setpasswordwindow.h"
-#include "viewpatientwindow.h"
+#include "editpatientwindow.h"
 #include "model.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -97,7 +97,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionPatient_triggered()
 {
-    ViewPatientWindow wndw;
+    EditPatientWindow wndw;
     wndw.exec();
 }
 

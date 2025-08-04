@@ -183,9 +183,10 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>Edit</string>
     </property>
     <addaction name="actionPatient"/>
+    <addaction name="actionReports"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuView"/>
@@ -197,7 +198,12 @@
   </action>
   <action name="actionPatient">
    <property name="text">
-    <string>Patient data</string>
+    <string>Patients</string>
+   </property>
+  </action>
+  <action name="actionReports">
+   <property name="text">
+    <string>Reports</string>
    </property>
   </action>
  </widget>

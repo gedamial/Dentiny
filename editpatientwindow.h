@@ -1,19 +1,19 @@
-#ifndef VIEWPATIENTWINDOW_H
-#define VIEWPATIENTWINDOW_H
+#ifndef EDITPATIENTWINDOW_H
+#define EDITPATIENTWINDOW_H
 
 #include <QDialog>
 
 namespace Ui {
-class ViewPatientWindow;
+class EditPatientWindow;
 }
 
-class ViewPatientWindow : public QDialog
+class EditPatientWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ViewPatientWindow(QWidget *parent = nullptr);
-    ~ViewPatientWindow();
+    explicit EditPatientWindow(QWidget *parent = nullptr);
+    ~EditPatientWindow();
 
 private slots:
     void on_btnCancel_clicked();
@@ -27,7 +27,7 @@ private slots:
     void on_btnOK_clicked();
 
 private:
-    Ui::ViewPatientWindow *ui;
+    Ui::EditPatientWindow *ui;
 };
 
-#endif // VIEWPATIENTWINDOW_H
+#endif // EDITPATIENTWINDOW_H
