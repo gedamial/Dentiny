@@ -46,20 +46,14 @@ void AddAppointmentWindow::on_btnCancel_clicked()
 
 void AddAppointmentWindow::on_btnConfirm_clicked()
 {
-    QMessageBox msgBox;
-
     if(ui->cmbPatient->currentIndex() == -1)
     {
-        msgBox.setInformativeText("Please select a patient from the list.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "No patient selected", "Please select a patient from the list.", QMessageBox::Ok);
     }
 
     else if(ui->dateTimeEdit->dateTime() < QDateTime::currentDateTime())
     {
-        msgBox.setInformativeText("Cannot create an appointment in the past.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Invalid date", "Cannot create an appointment in the past.", QMessageBox::Ok);
     }
 
     else
@@ -79,4 +73,3 @@ void AddAppointmentWindow::on_btnConfirm_clicked()
         close();
     }
 }
-

@@ -8,6 +8,8 @@
 #include "placedao.h"
 #include "statusdao.h"
 #include <QCryptographicHash>
+#include "report.h"
+#include "reportdao.h"
 
 class Model
 {
@@ -24,6 +26,7 @@ public:
     Patient getPatientFromId(unsigned int id);
     Patient getPatientFromCf(const QString& cf);
     QList<Patient> getAllPatients();
+    bool updatePatient(const Patient& newPatientData);
 
     // Manage appointments
     Appointment getAppointmentFromId(int id);
@@ -39,6 +42,9 @@ public:
     QList<Place> getAllPlaces();
     int getPlaceIdFromBelfiore(const QString& belfiore);
 
+    // Manage reports
+    bool insertReport(const Report& report);
+
 private:
     QSqlDatabase db;
 
@@ -46,6 +52,7 @@ private:
     AppointmentDAO appointmentDao;
     PlaceDAO placeDao;
     StatusDAO statusDao;
+    ReportDAO reportDao;
 
     QCryptographicHash::Algorithm hashingFunction;
 };

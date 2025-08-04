@@ -19,9 +19,14 @@ public:
 
 private slots:
     void on_btnCancel_clicked();
+    void on_btnUpload_clicked();
+
+    void on_btnOK_clicked();
 
 private:
     Ui::AddReportWindow *ui;
+
+    QStringList uploadedFilePaths;
 };
 
 #endif // ADDREPORTWINDOW_H

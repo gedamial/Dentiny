@@ -106,3 +106,23 @@ QList<Patient> PatientDAO::getAllPatientsSortedBySurname()
 
     return patients;
 }
+
+bool PatientDAO::updatePatient(const Patient &newPatientData)
+{
+    QSqlDatabase db = DBManager::getInstance().getDatabase();
+
+    QSqlQuery query(db);
+    query.prepare("UPDATE Patient SET name=:name, surname=:surname, cf=:cf, sex=:sex, birthday=:birthday, fk_birthplace=:fk_birthplace, residence=:residence, email=:email, phone=:phone WHERE id = :id");
+    query.bindValue(":id", newPatientData.id);
+    query.bindValue(":name", newPatientData.name);
+    query.bindValue(":surname", newPatientData.surname);
+    query.bindValue(":cf", newPatientData.cf);
+    query.bindValue(":sex", newPatientData.sex);
+    query.bindValue(":birthday", newPatientData.birthday);
+    query.bindValue(":fk_birthplace", newPatientData.fk_birthplace);
+    query.bindValue(":residence", newPatientData.residence);
+    query.bindValue(":email", newPatientData.email);
+    query.bindValue(":phone", newPatientData.phone);
+
+    return query.exec();
+}

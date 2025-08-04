@@ -13,6 +13,7 @@ public:
     Patient getPatientFromCf(const QString& cf);
     QList<Patient> getAllPatients();
     QList<Patient> getAllPatientsSortedBySurname();
+    bool updatePatient(const Patient& newPatientData);
 };
 
 #endif // PATIENTDAO_H

@@ -55,7 +55,6 @@ void EditAppointmentWindow::on_btnCancel_clicked()
     close();
 }
 
-
 void EditAppointmentWindow::on_btnSave_clicked()
 {
     Model m;

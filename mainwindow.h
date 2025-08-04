@@ -30,6 +30,10 @@ private slots:
 
     void on_btnSetPassword_clicked();
 
+    void on_actionExit_triggered();
+
+    void on_actionPatient_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

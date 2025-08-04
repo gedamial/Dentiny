@@ -8,9 +8,8 @@
 #include "addappointmentwindow.h"
 #include "addreportwindow.h"
 #include "setpasswordwindow.h"
+#include "viewpatientwindow.h"
 #include "model.h"
-
-#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -87,6 +86,18 @@ void MainWindow::on_btnAddNewRecord_clicked()
 void MainWindow::on_btnSetPassword_clicked()
 {
     SetPasswordWindow wndw;
+    wndw.exec();
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::quit();
+}
+
+
+void MainWindow::on_actionPatient_triggered()
+{
+    ViewPatientWindow wndw;
     wndw.exec();
 }
 

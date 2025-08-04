@@ -49,10 +49,7 @@ bool AddPatientWindow::InsertPatient()
 
     if(fk_birthplace < 0)
     {
-        QMessageBox msgBox;
-        msgBox.setInformativeText("There was an error with the Birthplace value.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::critical(this, "Invalid Birthplace value", "There was an error with the Birthplace value.", QMessageBox::Ok);
         return false;
     }
 
@@ -66,58 +63,47 @@ bool AddPatientWindow::InsertPatient()
 
 void AddPatientWindow::on_btnInsert_clicked()
 {
-    QMessageBox msgBox;
-
     if(ui->txtName->text().isEmpty())
     {
-        msgBox.setInformativeText("Please insert a Name.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Invalid name", "Please insert a Name.", QMessageBox::Ok);
     }
 
     else if(ui->txtSurname->text().isEmpty())
     {
-        msgBox.setInformativeText("Please insert a Surname.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Invalid surname", "Please insert a Surname.", QMessageBox::Ok);
+    }
+
+    else if(ui->dateBirthday->date() > QDate::currentDate())
+    {
+        QMessageBox::warning(this, "Invalid date", "Please insert a valid date.", QMessageBox::Ok);
     }
 
     else if(ui->txtResidence->text().isEmpty())
     {
-        msgBox.setInformativeText("Please insert a Residence.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Invalid residence", "Please insert a Residence.", QMessageBox::Ok);
     }
 
     else if(ui->txtEmail->text().isEmpty() || ui->txtPhone->text().isEmpty())
     {
-        msgBox.setInformativeText("Please insert an email or a phone number.");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Invalid email or phone number", "Please insert an email or phone number.", QMessageBox::Ok);
     }
 
     else
     {
         if(InsertPatient())
         {
-            msgBox.setInformativeText("Patient added successfully.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.exec();
-
+            QMessageBox::information(this, "Patient added", "Patient added successfully!", QMessageBox::Ok);
             close();
         }
+
         else
         {
-            msgBox.setInformativeText("A database error occurred while inserting new patient.");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.exec();
+            QMessageBox::critical(this, "Database error", "A database error occurred while inserting new patient.", QMessageBox::Ok);
         }
     }
 }
-
 
 void AddPatientWindow::on_btnCancel_clicked()
 {
     close();
 }
-

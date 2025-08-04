@@ -197,7 +197,7 @@
   </action>
   <action name="actionPatient">
    <property name="text">
-    <string>Patient</string>
+    <string>Patient data</string>
    </property>
   </action>
  </widget>

@@ -59,6 +59,11 @@ QList<Patient> Model::getAllPatients()
     return patientDao.getAllPatients();
 }
 
+bool Model::updatePatient(const Patient &newPatientData)
+{
+    return patientDao.updatePatient(newPatientData);
+}
+
 Appointment Model::getAppointmentFromId(int id)
 {
     return appointmentDao.getAppointmentFromId(id);
@@ -97,4 +102,9 @@ QList<Place> Model::getAllPlaces()
 int Model::getPlaceIdFromBelfiore(const QString &belfiore)
 {
     return placeDao.getPlaceIdFromBelfiore(belfiore);
+}
+
+bool Model::insertReport(const Report &report)
+{
+    return reportDao.insertReport(report);
 }
