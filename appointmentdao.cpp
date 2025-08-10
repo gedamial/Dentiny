@@ -7,7 +7,7 @@
 
 AppointmentDAO::AppointmentDAO() {}
 
-Appointment AppointmentDAO::LoadFromQueryRow(const QSqlQuery& query)
+Appointment AppointmentDAO::loadFromQueryRow(const QSqlQuery& query)
 {
     Appointment app;
     app.id = query.value("id").toInt();
@@ -29,7 +29,7 @@ Appointment AppointmentDAO::getAppointmentFromId(int id)
     if(query.exec())
     {
         query.next();
-        return LoadFromQueryRow(query);
+        return loadFromQueryRow(query);
     }
 
     else
@@ -70,7 +70,7 @@ QList<Appointment> AppointmentDAO::getAppointmentsFromDateSorted(QString date)
     {
         while(query.next())
         {
-            Appointment newAppointment = LoadFromQueryRow(query);
+            Appointment newAppointment = loadFromQueryRow(query);
             appointments.append(newAppointment);
         }
     }
@@ -88,7 +88,7 @@ QList<Appointment> AppointmentDAO::getAppointmentsFromDateSorted(QString date)
     return appointments;
 }
 
-void AppointmentDAO::UpdateAppointmentWithId(unsigned int id, const Appointment& newAppointment)
+void AppointmentDAO::updateAppointment(const Appointment& newAppointment)
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
     QSqlQuery query(db);

@@ -183,7 +183,7 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>Edit</string>
+     <string>View/Edit</string>
     </property>
     <addaction name="actionPatient"/>
     <addaction name="actionReports"/>

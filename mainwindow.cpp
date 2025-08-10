@@ -10,10 +10,9 @@
 #include "setpasswordwindow.h"
 #include "editpatientwindow.h"
 #include "model.h"
+#include "editreportswindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), Observer()
 {
     ui->setupUi(this);
 
@@ -23,10 +22,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Make sure the list appears on start-up
     UpdateAppointmentsList();
+
+    // Register for updates
+    Model::RegisterObserver(this, ObserverType::Appointments);
 }
 
 MainWindow::~MainWindow()
 {
+    Model::UnregisterObserver(this, ObserverType::Appointments);
+
     delete ui;
 }
 
@@ -99,5 +103,16 @@ void MainWindow::on_actionPatient_triggered()
 {
     EditPatientWindow wndw;
     wndw.exec();
+}
+
+void MainWindow::on_actionReports_triggered()
+{
+    EditReportsWindow wndw;
+    wndw.exec();
+}
+
+void MainWindow::UpdateAppointments()
+{
+    UpdateAppointmentsList();
 }
 

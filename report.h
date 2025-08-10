@@ -11,7 +11,6 @@ public:
     int id;
     QString datetime;
     QString notes;
-    QString filenames;
     int fk_patient;
 };
 

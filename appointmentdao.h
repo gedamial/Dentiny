@@ -9,11 +9,11 @@ class AppointmentDAO
 public:
     AppointmentDAO();
 
-    Appointment LoadFromQueryRow(const QSqlQuery& query);
+    Appointment loadFromQueryRow(const QSqlQuery& query);
     Appointment getAppointmentFromId(int id);
     bool insertAppointment(const Appointment& app);
     QList<Appointment> getAppointmentsFromDateSorted(QString date);
-    void UpdateAppointmentWithId(unsigned int id, const Appointment& newAppointment);
+    void updateAppointment(const Appointment& newAppointment);
 };
 
 #endif // APPOINTMENTDAO_H

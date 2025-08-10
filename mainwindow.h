@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "observer.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -9,7 +10,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, public Observer
 {
     Q_OBJECT
 
@@ -34,7 +35,13 @@ private slots:
 
     void on_actionPatient_triggered();
 
+    void on_actionReports_triggered();
+
 private:
     Ui::MainWindow *ui;
+
+    virtual void UpdateAppointments() override;
 };
+
+
 #endif // MAINWINDOW_H

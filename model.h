@@ -10,11 +10,29 @@
 #include <QCryptographicHash>
 #include "report.h"
 #include "reportdao.h"
+#include "attachment.h"
+#include "attachmentdao.h"
+
+#include <QVector>
+#include <QWidget>
+#include "observer.h"
+
+enum class ObserverType
+{
+    Appointments,
+    Reports
+};
 
 class Model
 {
 public:
     Model();
+
+    // OBSERVERS
+    static void RegisterObserver(Observer* newObserver, ObserverType type);
+    static void UnregisterObserver(Observer* observer, ObserverType type);
+    static QVector<Observer*> AppointmentObservers;
+    static QVector<Observer*> ReportObservers;
 
     // Authentication
     bool Authenticate(const QString& hashValue);
@@ -32,7 +50,7 @@ public:
     Appointment getAppointmentFromId(int id);
     bool insertAppointment(const Appointment& app);
     QList<Appointment> getAppointmentsFromDateSorted(QString date);
-    void updateAppointmentWithId(unsigned int id, const Appointment& newAppointment);
+    void updateAppointment(const Appointment& newAppointment);
 
     // Manage statuses
     QString getStatusNameFromId(int id);
@@ -43,7 +61,16 @@ public:
     int getPlaceIdFromBelfiore(const QString& belfiore);
 
     // Manage reports
-    bool insertReport(const Report& report);
+    int insertReport(const Report& report);
+    QList<Report> getReportsOfPatient(int patientId);
+    Report getReportFromId(int id);
+    void deleteReport(int id);
+    void updateReport(const Report& newReport);
+
+    // Manage attachments
+    bool insertAttachment(const Attachment& attachment);
+    QList<Attachment> getAttachmentsOfReport(const Report &report);
+    void deleteAttachment(const Attachment& attachment);
 
 private:
     QSqlDatabase db;
@@ -53,8 +80,11 @@ private:
     PlaceDAO placeDao;
     StatusDAO statusDao;
     ReportDAO reportDao;
+    AttachmentDAO attachmentDao;
 
     QCryptographicHash::Algorithm hashingFunction;
+
+    static void UpdateObservers(const ObserverType observerType);
 };
 
 #endif // MODEL_H

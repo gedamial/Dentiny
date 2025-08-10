@@ -70,7 +70,7 @@ void EditAppointmentWindow::on_btnSave_clicked()
     newApp.reason = ui->txtReason->toPlainText();
     newApp.fk_status = ui->cmbStatus->currentIndex();
 
-    m.updateAppointmentWithId(appointmentID, newApp);
+    m.updateAppointment(newApp);
 
     close();
 }

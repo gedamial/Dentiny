@@ -3,6 +3,7 @@
 #include "authenticationwindow.h"
 #include "model.h"
 #include "report.h"
+#include "attachment.h"
 #include <QMessageBox>
 #include <QFile>
 #include <QFileDialog>
@@ -65,20 +66,24 @@ void AddReportWindow::on_btnCancel_clicked()
 
 void AddReportWindow::on_btnUpload_clicked()
 {
-    QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setViewMode(QFileDialog::Detail);
+    QFileDialog uploadDialog(this);
+    uploadDialog.setFileMode(QFileDialog::ExistingFiles);
+    uploadDialog.setViewMode(QFileDialog::Detail);
 
-    if (dialog.exec())
+    if (uploadDialog.exec())
     {
-        uploadedFilePaths = dialog.selectedFiles();
+        uploadedFilePaths.append(uploadDialog.selectedFiles());
+
+        QString labelStr;
 
         for(int i = 0; i < uploadedFilePaths.size(); ++i)
         {
             QFileInfo fileInfo(uploadedFilePaths[i]);
 
-            ui->lblUploadedFiles->setText(ui->lblUploadedFiles->text() + fileInfo.fileName() + "\n");
+            labelStr += fileInfo.fileName() + "\n";
         }
+
+        ui->lblUploadedFiles->setText(labelStr);
     }
 }
 
@@ -91,34 +96,46 @@ void AddReportWindow::on_btnOK_clicked()
 
     QString fileNames;
 
+    QList<Attachment> attachments;
+
     // Upload files by copying them into the patient-dedicated folder
     for(int i = 0; i < uploadedFilePaths.size(); ++i)
     {
         const QFileInfo currentFileInfo(uploadedFilePaths[i]);
         const QString fileName = currentFileInfo.fileName();
-        const QString destinationDir = "./" + patientIdString;
+        const QString destinationDir = QCoreApplication::applicationDirPath() + "/Reports/" + patientIdString;
 
         QDir directory(destinationDir);
 
         if(!directory.exists())
         {
-            directory.mkdir(".");
+            directory.mkpath(destinationDir);
         }
 
         const QString destinationPath = destinationDir + "/" + fileName;
         QFile::copy(uploadedFilePaths[i], destinationPath);
 
         fileNames += fileName+";";
+
+        // Add attachment in the database
+        Attachment newAttachment;
+        newAttachment.filename = fileName;
+        attachments.append(newAttachment);
     }
 
     // Add report in the database
     Report newReport;
     newReport.datetime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
     newReport.notes = ui->txtNotes->toPlainText();
-    newReport.filenames = fileNames;
     newReport.fk_patient = selectedPatient.id;
+    const int reportId = m.insertReport(newReport);
 
-    m.insertReport(newReport);
+    // Add attachments in the database
+    for(int i = 0; i < attachments.size(); ++i)
+    {
+        attachments[i].fk_report = reportId;
+        m.insertAttachment(attachments[i]);
+    }
 
     close();
 }
