@@ -21,6 +21,8 @@ private slots:
 
     void on_btnSave_clicked();
 
+    void on_btnReminder_clicked();
+
 private:
     Ui::EditAppointmentWindow *ui;
 

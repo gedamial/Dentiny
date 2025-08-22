@@ -39,10 +39,7 @@ int AddReportWindow::exec()
 
     else if(result == AuthenticationResult::Failed)
     {
-        QMessageBox msgBox;
-        msgBox.setInformativeText("Authentication failed!");
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        QMessageBox::warning(this, "Authentication failed", "Authentication failed!", QMessageBox::Ok);
         close();
     }
 

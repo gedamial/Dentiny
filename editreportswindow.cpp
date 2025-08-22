@@ -3,9 +3,11 @@
 #include "model.h"
 #include "reportitem.h"
 #include "ui_reportitem.h"
+#include "authenticationwindow.h"
 #include <QPushButton>
 #include <QDesktopServices>
 #include <QFile>
+#include <QMessageBox>
 
 EditReportsWindow::EditReportsWindow(QWidget *parent) : QDialog(parent), ui(new Ui::EditReportsWindow)
 {
@@ -31,6 +33,32 @@ EditReportsWindow::~EditReportsWindow()
     Model::UnregisterObserver(this, ObserverType::Reports);
 
     delete ui;
+}
+
+int EditReportsWindow::exec()
+{
+    AuthenticationWindow auth_wndw;
+    auth_wndw.exec();
+
+    const AuthenticationResult result = auth_wndw.getAuthenticationResult();
+
+    if(result == AuthenticationResult::Success)
+    {
+        return QDialog::exec();
+    }
+
+    else if(result == AuthenticationResult::Failed)
+    {
+        QMessageBox::warning(this, "Authentication failed", "Authentication failed!", QMessageBox::Ok);
+        close();
+    }
+
+    else if(result == AuthenticationResult::Aborted)
+    {
+        close();
+    }
+
+    return -1;
 }
 
 void EditReportsWindow::on_cmbPatient_currentIndexChanged(int index)

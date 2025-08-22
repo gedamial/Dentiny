@@ -75,3 +75,15 @@ void EditAppointmentWindow::on_btnSave_clicked()
     close();
 }
 
+
+void EditAppointmentWindow::on_btnReminder_clicked()
+{
+    Model m;
+
+    // Get the selected Patient
+    QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
+    Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+
+    m.sendReminder(selectedPatient, associatedAppointment);
+}
+

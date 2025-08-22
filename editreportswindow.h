@@ -19,6 +19,8 @@ public:
     explicit EditReportsWindow(QWidget *parent = nullptr);
     ~EditReportsWindow();
 
+    int exec() override;
+
     void OpenAttachment(const Attachment& attachment);
 
 private slots:
