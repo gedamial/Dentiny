@@ -12,6 +12,7 @@
 #include "reportdao.h"
 #include "attachment.h"
 #include "attachmentdao.h"
+#include "credentialdao.h"
 
 #include <QVector>
 #include <QWidget>
@@ -72,6 +73,9 @@ public:
     QList<Attachment> getAttachmentsOfReport(const Report &report);
     void deleteAttachment(const Attachment& attachment);
 
+    // EMAIL SERVICE
+    int sendReminder(const Patient& patient, const Appointment& appointment);
+
 private:
     QSqlDatabase db;
 
@@ -81,6 +85,7 @@ private:
     StatusDAO statusDao;
     ReportDAO reportDao;
     AttachmentDAO attachmentDao;
+    CredentialDAO credentialDao;
 
     QCryptographicHash::Algorithm hashingFunction;
 

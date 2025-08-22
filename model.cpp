@@ -1,6 +1,11 @@
 #include "model.h"
 #include "dbmanager.h"
 
+#include "SmtpClient/emailaddress.h"
+#include "SmtpClient/mimemessage.h"
+#include "SmtpClient/mimetext.h"
+#include "SmtpClient/smtpclient.h"
+
 Model::Model()
 {
     db = DBManager::getInstance().getDatabase();
@@ -38,11 +43,7 @@ void Model::UnregisterObserver(Observer* observer, ObserverType type)
 
 bool Model::Authenticate(const QString& plaintext)
 {
-    QSqlQuery query("SELECT password FROM Credential", db);
-    query.exec();
-    query.next();
-
-    const QString truePassword = query.value("password").toString();
+    const QString truePassword = credentialDao.getCredential("dentist_password");
     const QByteArray hashedValue = QCryptographicHash::hash(plaintext.toUtf8(), QCryptographicHash::Sha256);
 
     if(hashedValue.toHex() == truePassword)
@@ -184,6 +185,73 @@ QList<Attachment> Model::getAttachmentsOfReport(const Report &report)
 void Model::deleteAttachment(const Attachment &attachment)
 {
     attachmentDao.deleteAttachment(attachment);
+}
+
+int Model::sendReminder(const Patient& patient, const Appointment& appointment)
+{
+    // SMTP address
+    const QString smtp_address = credentialDao.getCredential("email_smtp_address");
+    const int smtp_port = credentialDao.getCredential("email_smtp_port").toInt();
+
+    // Sender data
+    const QString sender_address = credentialDao.getCredential("email_username");
+    const QString sender_name = "Dentiny";
+    const QString sender_password = credentialDao.getCredential("email_password");
+
+    // Receiver data
+    const QString receiver_address = patient.email;
+    const QString receiver_name = patient.name + " " + patient.surname;
+
+    // Email data
+    const QString SUBJECT = "Dentist appointment reminder!";
+    const QString MESSAGE = "Don't forget your dentist appointment scheduled for " + appointment.datetime;
+
+    //
+
+    MimeMessage email;
+
+    EmailAddress sender(sender_address, sender_name);
+    EmailAddress receiver(receiver_address, receiver_name);
+
+    email.setSender(sender);
+    email.addRecipient(receiver);
+    email.setSubject(SUBJECT);
+
+    MimeText text;
+    text.setText(MESSAGE);
+
+    email.addPart(&text);
+
+    // Now we can send the mail
+    SmtpClient smtp(smtp_address, smtp_port, SmtpClient::SslConnection);
+
+    smtp.connectToHost();
+
+    if (!smtp.waitForReadyConnected())
+    {
+        qDebug() << "Failed to connect to host!";
+        return -1;
+    }
+
+    smtp.login(sender_address, sender_password);
+
+    if (!smtp.waitForAuthenticated())
+    {
+        qDebug() << "Failed to login!";
+        return -2;
+    }
+
+    smtp.sendMail(email);
+
+    if (!smtp.waitForMailSent())
+    {
+        qDebug() << "Failed to send mail!";
+        return -3;
+    }
+
+    smtp.quit();
+
+    return 0;
 }
 
 void Model::UpdateObservers(const ObserverType observerType)
