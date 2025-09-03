@@ -1,6 +1,8 @@
 #ifndef DBMANAGER_H
 #define DBMANAGER_H
+
 #include <QSqlDatabase>
+#include <QString>
 
 class DBManager
 {
@@ -14,6 +16,7 @@ private:
     DBManager();
 
     QSqlDatabase database;
+    void InitializeDatabase();
 };
 
 #endif // DBMANAGER_H

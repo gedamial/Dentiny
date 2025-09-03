@@ -4,5 +4,6 @@
         <file>img/AddNewAppointment.png</file>
         <file>img/AddNewRecord.png</file>
         <file>img/SetPassword.png</file>
+        <file>sql/schema.sql</file>
     </qresource>
 </RCC>
