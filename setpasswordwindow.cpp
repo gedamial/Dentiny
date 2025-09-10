@@ -1,7 +1,7 @@
 #include "setpasswordwindow.h"
 #include "ui_setpasswordwindow.h"
 #include "authenticationwindow.h"
-#include "model.h"
+#include "credentialmodel.h"
 #include <QMessageBox>
 
 SetPasswordWindow::SetPasswordWindow(QWidget *parent) : QDialog(parent), ui(new Ui::SetPasswordWindow)
@@ -61,7 +61,7 @@ void SetPasswordWindow::on_btnOK_clicked()
 
     else
     {
-        Model m;
+        CredentialModel m;
         m.SetPassword(psw1);
 
         close();

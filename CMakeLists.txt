@@ -38,7 +38,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         status.h status.cpp
         statusdao.h statusdao.cpp
         authenticationwindow.h authenticationwindow.cpp authenticationwindow.ui
-        model.h model.cpp
+
         addreportwindow.h addreportwindow.cpp addreportwindow.ui
         setpasswordwindow.h setpasswordwindow.cpp setpasswordwindow.ui
         report.h report.cpp
@@ -48,9 +48,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         reportitem.h reportitem.cpp reportitem.ui
         attachment.h attachment.cpp
         attachmentdao.h attachmentdao.cpp
-        observer.h observer.cpp
+
         credentialdao.h credentialdao.cpp
         SmtpClient/emailaddress.cpp SmtpClient/emailaddress.h SmtpClient/mimeattachment.cpp SmtpClient/mimeattachment.h SmtpClient/mimebase64encoder.cpp SmtpClient/mimebase64encoder.h SmtpClient/mimebase64formatter.cpp SmtpClient/mimebase64formatter.h SmtpClient/mimebytearrayattachment.cpp SmtpClient/mimebytearrayattachment.h SmtpClient/mimecontentencoder.cpp SmtpClient/mimecontentencoder.h SmtpClient/mimecontentformatter.cpp SmtpClient/mimecontentformatter.h SmtpClient/mimefile.cpp SmtpClient/mimefile.h SmtpClient/mimehtml.cpp SmtpClient/mimehtml.h SmtpClient/mimeinlinefile.cpp SmtpClient/mimeinlinefile.h SmtpClient/mimemessage.cpp SmtpClient/mimemessage.h SmtpClient/mimemultipart.cpp SmtpClient/mimemultipart.h SmtpClient/mimepart.cpp SmtpClient/mimepart.h SmtpClient/mimeqpencoder.cpp SmtpClient/mimeqpencoder.h SmtpClient/mimeqpformatter.cpp SmtpClient/mimeqpformatter.h SmtpClient/mimetext.cpp SmtpClient/mimetext.h SmtpClient/quotedprintable.cpp SmtpClient/quotedprintable.h SmtpClient/smtpclient.cpp SmtpClient/smtpclient.h SmtpClient/smtpmime_global.h
+        credentialmodel.h credentialmodel.cpp
+        patientmodel.h patientmodel.cpp
+        appointmentmodel.h appointmentmodel.cpp
+        reportmodel.h reportmodel.cpp
+        statusmodel.h statusmodel.cpp
+        placemodel.h placemodel.cpp
+        attachmentmodel.h attachmentmodel.cpp
+        appointmentobserver.h appointmentobserver.cpp
+
+        reportobserver.h reportobserver.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET Dentiny APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

@@ -5,13 +5,13 @@
 #include "attachment.h"
 #include "report.h"
 #include "reportitem.h"
-#include "observer.h"
+#include "reportobserver.h"
 
 namespace Ui {
 class EditReportsWindow;
 }
 
-class EditReportsWindow : public QDialog, public Observer
+class EditReportsWindow : public QDialog, public ReportObserver
 {
     Q_OBJECT
 

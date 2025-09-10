@@ -3,7 +3,9 @@
 #include "patient.h"
 #include "appointment.h"
 #include "status.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "statusmodel.h"
+#include "appointmentmodel.h"
 #include <QList>
 #include <QMessageBox>
 
@@ -12,8 +14,8 @@ AddAppointmentWindow::AddAppointmentWindow(const QDate defaultDate, QWidget *par
     ui->setupUi(this);
 
     // Pre-load patient combobox
-    Model m;
-    QList<Patient> patients = m.getAllPatientsSortedBySurname();
+    PatientModel pm;
+    QList<Patient> patients = pm.getAllPatientsSortedBySurname();
 
     for(int i = 0; i < patients.size(); ++i)
     {
@@ -26,7 +28,8 @@ AddAppointmentWindow::AddAppointmentWindow(const QDate defaultDate, QWidget *par
     ui->dateTimeEdit->setTime(QTime::currentTime());
 
     // Pre-load with appointment statuses
-    QList<Status> statuses = m.getAllStatuses();
+    StatusModel sm;
+    QList<Status> statuses = sm.getAllStatuses();
 
     for(int i = 0; i < statuses.size(); ++i)
     {
@@ -58,9 +61,11 @@ void AddAppointmentWindow::on_btnConfirm_clicked()
 
     else
     {
-        Model m;
+        PatientModel pm;
+        AppointmentModel am;
+
         QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
-        Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+        Patient selectedPatient = pm.getPatientFromCf(selectedPatientCf);
 
         Appointment newApp;
         newApp.datetime = ui->dateTimeEdit->dateTime().toString("yyyy-MM-dd hh:mm");
@@ -68,7 +73,7 @@ void AddAppointmentWindow::on_btnConfirm_clicked()
         newApp.fk_status = ui->cmbStatus->currentIndex();
         newApp.fk_patient = selectedPatient.id;
 
-        m.insertAppointment(newApp);
+        am.insertAppointment(newApp);
 
         close();
     }

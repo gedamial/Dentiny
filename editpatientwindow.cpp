@@ -1,6 +1,7 @@
 #include "editpatientwindow.h"
 #include "ui_editpatientwindow.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "placemodel.h"
 #include "patient.h"
 #include <QMessageBox>
 
@@ -8,10 +9,11 @@ EditPatientWindow::EditPatientWindow(QWidget *parent) : QDialog(parent), ui(new 
 {
     ui->setupUi(this);
 
-    Model m;
+    PatientModel pm;
+    PlaceModel place_m;
 
     // Pre-load patient combobox
-    QList<Patient> patients = m.getAllPatientsSortedBySurname();
+    QList<Patient> patients = pm.getAllPatientsSortedBySurname();
 
     for(int i = 0; i < patients.size(); ++i)
     {
@@ -23,7 +25,7 @@ EditPatientWindow::EditPatientWindow(QWidget *parent) : QDialog(parent), ui(new 
     ui->cmbBirthplace->insertItem(0, "Select an option...");
     ui->cmbBirthplace->setItemData(0, false, Qt::ItemIsEnabled);
 
-    QList<Place> places = m.getAllPlaces();
+    QList<Place> places = place_m.getAllPlaces();
 
     for(int i = 0; i< places.count(); ++i)
     {
@@ -58,8 +60,8 @@ void EditPatientWindow::on_cmbPatient_currentIndexChanged(int index)
     const QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
 
     // Fill in the text fields with the selected patient information
-    Model m;
-    Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+    PatientModel pm;
+    Patient selectedPatient = pm.getPatientFromCf(selectedPatientCf);
 
     ui->txtName->setText(selectedPatient.name);
     ui->txtSurname->setText(selectedPatient.surname);
@@ -108,9 +110,9 @@ void EditPatientWindow::on_btnOK_clicked()
         return;
     }
 
-    Model m;
+    PatientModel pm;
     const QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
-    Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+    Patient selectedPatient = pm.getPatientFromCf(selectedPatientCf);
 
     if(ui->txtName->text().isEmpty())
     {
@@ -139,6 +141,8 @@ void EditPatientWindow::on_btnOK_clicked()
 
     else
     {
+        PlaceModel place_m;
+
         selectedPatient.name = ui->txtName->text();
         selectedPatient.surname = ui->txtSurname->text();
         selectedPatient.cf = ui->txtFiscalCode->text();
@@ -146,7 +150,7 @@ void EditPatientWindow::on_btnOK_clicked()
         selectedPatient.birthday = ui->dateBirthday->date().toString("yyyy-MM-dd");
 
         QString belfiore = ui->cmbBirthplace->currentText().split("-")[0].trimmed();
-        int fk_birthplace = m.getPlaceIdFromBelfiore(belfiore);
+        int fk_birthplace = place_m.getPlaceIdFromBelfiore(belfiore);
 
         if(fk_birthplace < 0)
         {
@@ -159,7 +163,7 @@ void EditPatientWindow::on_btnOK_clicked()
         selectedPatient.email = ui->txtEmail->text();
         selectedPatient.phone = ui->txtPhone->text();
 
-        if(m.updatePatient(selectedPatient))
+        if(pm.updatePatient(selectedPatient))
         {
             QMessageBox::information(this, "Patient updated", "Patient updated successfully!", QMessageBox::Ok);
             close();

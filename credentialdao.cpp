@@ -16,3 +16,14 @@ QString CredentialDAO::getCredential(const QString &name)
 
     return query.value("value").toString();
 }
+
+void CredentialDAO::updateCredential(const QString &name, const QString &newValue)
+{
+    QSqlDatabase db = DBManager::getInstance().getDatabase();
+    QSqlQuery query(db);
+    query.prepare("UPDATE Credential SET password = :newPassword");
+    query.bindValue(":newPassword", newValue);
+    query.exec();
+}
+
+

@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS "Place" (
 	"belfiore"	TEXT NOT NULL UNIQUE,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
-INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (1, 'Agli�', 'TO', 'A074');
+INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (1, 'Agliè', 'TO', 'A074');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (2, 'Airasca', 'TO', 'A109');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (3, 'Ala di Stura', 'TO', 'A117');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (4, 'Albiano d''Ivrea', 'TO', 'A157');
@@ -565,8 +565,8 @@ INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (518, 'Canosio', 'CN
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (519, 'Caprauna', 'CN', 'B692');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (520, 'Caraglio', 'CN', 'B719');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (521, 'Caramagna Piemonte', 'CN', 'B720');
-INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (522, 'Card�', 'CN', 'B755');
-INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (523, 'Carr�', 'CN', 'B841');
+INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (522, 'Cardè', 'CN', 'B755');
+INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (523, 'Carrù', 'CN', 'B841');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (524, 'Cartignano', 'CN', 'B845');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (525, 'Casalgrasso', 'CN', 'B894');
 INSERT INTO Place (id, name, abbreviation, belfiore) VALUES (526, 'Castagnito', 'CN', 'C046');

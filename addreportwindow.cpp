@@ -1,7 +1,9 @@
 #include "addreportwindow.h"
 #include "ui_addreportwindow.h"
 #include "authenticationwindow.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "reportmodel.h"
+#include "attachmentmodel.h"
 #include "report.h"
 #include "attachment.h"
 #include <QMessageBox>
@@ -15,8 +17,8 @@ AddReportWindow::AddReportWindow(QWidget *parent) : QDialog(parent), ui(new Ui::
     ui->setupUi(this);
 
     // Pre-load patient combobox
-    Model m;
-    QList<Patient> patients = m.getAllPatientsSortedBySurname();
+    PatientModel pm;
+    QList<Patient> patients = pm.getAllPatientsSortedBySurname();
 
     for(int i = 0; i < patients.size(); ++i)
     {
@@ -86,9 +88,12 @@ void AddReportWindow::on_btnUpload_clicked()
 
 void AddReportWindow::on_btnOK_clicked()
 {
-    Model m;
+    PatientModel pm;
+    ReportModel rm;
+    AttachmentModel am;
+
     const QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
-    const Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+    const Patient selectedPatient = pm.getPatientFromCf(selectedPatientCf);
     const QString patientIdString = QString::number(selectedPatient.id);
 
     QString fileNames;
@@ -125,13 +130,13 @@ void AddReportWindow::on_btnOK_clicked()
     newReport.datetime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm");
     newReport.notes = ui->txtNotes->toPlainText();
     newReport.fk_patient = selectedPatient.id;
-    const int reportId = m.insertReport(newReport);
+    const int reportId = rm.insertReport(newReport);
 
     // Add attachments in the database
     for(int i = 0; i < attachments.size(); ++i)
     {
         attachments[i].fk_report = reportId;
-        m.insertAttachment(attachments[i]);
+        am.insertAttachment(attachments[i]);
     }
 
     close();

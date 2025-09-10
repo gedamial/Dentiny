@@ -1,6 +1,6 @@
 #include "authenticationwindow.h"
 #include "ui_authenticationwindow.h"
-#include "model.h"
+#include "credentialmodel.h"
 
 AuthenticationWindow::AuthenticationWindow(QWidget *parent)
     : QDialog(parent)
@@ -30,7 +30,7 @@ void AuthenticationWindow::on_btnCancel_clicked()
 
 void AuthenticationWindow::on_btnOK_clicked()
 {
-    Model m;
+    CredentialModel m;
     QString input = ui->txtPassword->text();
 
     if(m.Authenticate(input))

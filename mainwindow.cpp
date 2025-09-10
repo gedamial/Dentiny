@@ -9,10 +9,12 @@
 #include "addreportwindow.h"
 #include "setpasswordwindow.h"
 #include "editpatientwindow.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "statusmodel.h"
+#include "appointmentmodel.h"
 #include "editreportswindow.h"
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), Observer()
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), AppointmentObserver()
 {
     ui->setupUi(this);
 
@@ -24,12 +26,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     UpdateAppointmentsList();
 
     // Register for updates
-    Model::RegisterObserver(this, ObserverType::Appointments);
+    AppointmentModel am;
+    am.RegisterObserver(this);
 }
 
 MainWindow::~MainWindow()
 {
-    Model::UnregisterObserver(this, ObserverType::Appointments);
+    AppointmentModel am;
+    am.UnregisterObserver(this);
 
     delete ui;
 }
@@ -53,11 +57,13 @@ void MainWindow::on_btnNewAppointment_clicked()
 
 void MainWindow::UpdateAppointmentsList()
 {
-    Model m;
+    PatientModel pm;
+    AppointmentModel am;
+    StatusModel sm;
 
     // Get appointments of the selected date
     QString selectedDate = ui->calendarWidget->selectedDate().toString("yyyy-MM-dd");
-    QList<Appointment> apps = m.getAppointmentsFromDateSorted(selectedDate);
+    QList<Appointment> apps = am.getAppointmentsFromDateSorted(selectedDate);
 
     QWidget* container = new QWidget();                    // Container for the AppointmentItems
     QVBoxLayout* layout = new QVBoxLayout(container);      // Layout to stack them vertically
@@ -67,13 +73,13 @@ void MainWindow::UpdateAppointmentsList()
     for(int i = 0; i < apps.size(); ++i)
     {
         AppointmentItem* appItem = new AppointmentItem(apps[i].id);
-        Patient appPatient = m.getPatientFromId(apps[i].fk_patient);
+        Patient appPatient = pm.getPatientFromId(apps[i].fk_patient);
 
         appItem->ui->lblHeader_Time->setText(apps[i].datetime.split(" ")[1]);
         appItem->ui->lblHeader_Name->setText(appPatient.name);
         appItem->ui->lblHeader_Surname->setText(appPatient.surname);
         appItem->ui->lblHeader_Reason->setText(apps[i].reason);
-        appItem->ui->lblHeader_Status->setText(m.getStatusNameFromId(apps[i].fk_status));
+        appItem->ui->lblHeader_Status->setText(sm.getStatusNameFromId(apps[i].fk_status));
 
         layout->addWidget(appItem);  // Add to the layout
     }
@@ -97,7 +103,6 @@ void MainWindow::on_actionExit_triggered()
 {
     QApplication::quit();
 }
-
 
 void MainWindow::on_actionPatient_triggered()
 {

@@ -1,6 +1,8 @@
 #include "editreportswindow.h"
 #include "ui_editreportswindow.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "reportmodel.h"
+#include "attachmentmodel.h"
 #include "reportitem.h"
 #include "ui_reportitem.h"
 #include "authenticationwindow.h"
@@ -13,10 +15,10 @@ EditReportsWindow::EditReportsWindow(QWidget *parent) : QDialog(parent), ui(new 
 {
     ui->setupUi(this);
 
-    Model m;
+    PatientModel pm;
 
     // Pre-load patient combobox
-    QList<Patient> patients = m.getAllPatientsSortedBySurname();
+    QList<Patient> patients = pm.getAllPatientsSortedBySurname();
 
     for(int i = 0; i < patients.size(); ++i)
     {
@@ -25,12 +27,14 @@ EditReportsWindow::EditReportsWindow(QWidget *parent) : QDialog(parent), ui(new 
     }
 
     // Register for updates
-    Model::RegisterObserver(this, ObserverType::Reports);
+    ReportModel rm;
+    rm.RegisterObserver(this);
 }
 
 EditReportsWindow::~EditReportsWindow()
 {
-    Model::UnregisterObserver(this, ObserverType::Reports);
+    ReportModel rm;
+    rm.UnregisterObserver(this);
 
     delete ui;
 }
@@ -71,10 +75,13 @@ void EditReportsWindow::UpdateReportsList()
     const QString selectedPatientCf = ui->cmbPatient->currentText().split("-")[1].trimmed();
 
     // Load patient reports
-    Model m;
-    Patient selectedPatient = m.getPatientFromCf(selectedPatientCf);
+    PatientModel pm;
+    ReportModel rm;
+    AttachmentModel am;
 
-    QList<Report> reports = m.getReportsOfPatient(selectedPatient.id);
+    Patient selectedPatient = pm.getPatientFromCf(selectedPatientCf);
+
+    QList<Report> reports = rm.getReportsOfPatient(selectedPatient.id);
 
     QWidget* container = new QWidget();                    // Container for the ReportItems
     QVBoxLayout* layout = new QVBoxLayout(container);      // Layout to stack them vertically
@@ -86,7 +93,7 @@ void EditReportsWindow::UpdateReportsList()
         ReportItem* repItem = new ReportItem;
         SetupReportItem(repItem, reports[i]);
 
-        QList<Attachment> reportAttachments = m.getAttachmentsOfReport(reports[i]);
+        QList<Attachment> reportAttachments = am.getAttachmentsOfReport(reports[i]);
 
         for(int j = 0; j < reportAttachments.size(); ++j)
         {
@@ -119,34 +126,36 @@ void EditReportsWindow::SetupReportItem(ReportItem* reportItem, Report report)
 
 void EditReportsWindow::RemoveReport(Report report)
 {
-    Model m;
+    ReportModel rm;
+    AttachmentModel am;
 
     // Remove corresponding attachments from Reports folder
-    QList<Attachment> attachments = m.getAttachmentsOfReport(report);
+    QList<Attachment> attachments = am.getAttachmentsOfReport(report);
 
     for(int i = 0; i < attachments.size(); ++i)
     {
         const QString filePath = QCoreApplication::applicationDirPath() + "/Reports/" + QString::number(report.fk_patient) + "/" + attachments[i].filename;
         QFile::remove(filePath);
 
-        m.deleteAttachment(attachments[i]);
+        am.deleteAttachment(attachments[i]);
     }
 
-    m.deleteReport(report.id);
+    rm.deleteReport(report.id);
 }
 
 void EditReportsWindow::UpdateReport(ReportItem* reportItem, Report report)
 {
     report.notes = reportItem->ui->txtNotes->toPlainText();
 
-    Model m;
-    m.updateReport(report);
+    ReportModel rm;
+    rm.updateReport(report);
 }
 
 void EditReportsWindow::OpenAttachment(const Attachment& attachment)
 {
-    Model m;
-    Patient patient = m.getPatientFromId(m.getReportFromId(attachment.fk_report).fk_patient);
+    PatientModel pm;
+    ReportModel rm;
+    Patient patient = pm.getPatientFromId(rm.getReportFromId(attachment.fk_report).fk_patient);
 
     const QString path = QCoreApplication::applicationDirPath() + "/Reports/"+QString::number(patient.id)+"/"+attachment.filename;
     QDesktopServices::openUrl(QUrl::fromLocalFile(path));

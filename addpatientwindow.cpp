@@ -1,6 +1,7 @@
 #include "addpatientwindow.h"
 #include "ui_addpatientwindow.h"
-#include "model.h"
+#include "patientmodel.h"
+#include "placemodel.h"
 #include <QMessageBox>
 
 AddPatientWindow::AddPatientWindow(QWidget *parent)
@@ -8,10 +9,15 @@ AddPatientWindow::AddPatientWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    Model m;
+    PlaceModel place_m;
 
     // Pre-load birthplace combobox
-    QList<Place> places = m.getAllPlaces();
+    QList<Place> places = place_m.getAllPlaces();
+
+    // Sort the places alphabetically based on their name
+    std::sort(places.begin(), places.end(), [](const Place& a, const Place& b) {
+        return a.name < b.name;
+    });
 
     for(int i = 0; i< places.count(); ++i)
     {
@@ -32,7 +38,9 @@ AddPatientWindow::~AddPatientWindow()
 
 bool AddPatientWindow::InsertPatient()
 {
-    Model m;
+    PatientModel pm;
+    PlaceModel place_m;
+
     Patient toInsert;
 
     toInsert.cf = ui->txtFiscalCode->text();
@@ -45,7 +53,7 @@ bool AddPatientWindow::InsertPatient()
     toInsert.birthday = birthdayStr;
 
     QString belfiore = ui->cmbBirthplace->currentText().split("-")[0].trimmed();
-    int fk_birthplace = m.getPlaceIdFromBelfiore(belfiore);
+    int fk_birthplace = place_m.getPlaceIdFromBelfiore(belfiore);
 
     if(fk_birthplace < 0)
     {
@@ -58,7 +66,7 @@ bool AddPatientWindow::InsertPatient()
     toInsert.email = ui->txtEmail->text();
     toInsert.phone = ui->txtPhone->text();
 
-    return m.insertPatient(toInsert);
+    return pm.insertPatient(toInsert);
 }
 
 void AddPatientWindow::on_btnInsert_clicked()
@@ -83,7 +91,7 @@ void AddPatientWindow::on_btnInsert_clicked()
         QMessageBox::warning(this, "Invalid residence", "Please insert a Residence.", QMessageBox::Ok);
     }
 
-    else if(ui->txtEmail->text().isEmpty() || ui->txtPhone->text().isEmpty())
+    else if(ui->txtEmail->text().isEmpty() && ui->txtPhone->text().isEmpty())
     {
         QMessageBox::warning(this, "Invalid email or phone number", "Please insert an email or phone number.", QMessageBox::Ok);
     }
