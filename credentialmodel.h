@@ -2,7 +2,6 @@
 #define CREDENTIALMODEL_H
 
 #include <QString>
-#include <QSqlDatabase>
 #include "credentialdao.h"
 
 class CredentialModel
@@ -15,7 +14,6 @@ public:
     void SetPassword(const QString& newPassword);
 
 private:
-    QSqlDatabase db;
     CredentialDAO credentialDao;
 };
 

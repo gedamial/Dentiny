@@ -2,6 +2,7 @@
 #include "dbmanager.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
 
 CredentialDAO::CredentialDAO() {}
 
@@ -21,8 +22,9 @@ void CredentialDAO::updateCredential(const QString &name, const QString &newValu
 {
     QSqlDatabase db = DBManager::getInstance().getDatabase();
     QSqlQuery query(db);
-    query.prepare("UPDATE Credential SET password = :newPassword");
-    query.bindValue(":newPassword", newValue);
+    query.prepare("UPDATE Credential SET value = :new_value WHERE name = :credential_name");
+    query.bindValue(":credential_name", name);
+    query.bindValue(":new_value", newValue);
     query.exec();
 }
 

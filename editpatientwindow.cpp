@@ -134,7 +134,7 @@ void EditPatientWindow::on_btnOK_clicked()
         QMessageBox::warning(this, "Invalid residence", "Please insert a Residence.", QMessageBox::Ok);
     }
 
-    else if(ui->txtEmail->text().isEmpty() || ui->txtPhone->text().isEmpty())
+    else if(ui->txtEmail->text().isEmpty() && ui->txtPhone->text().isEmpty())
     {
         QMessageBox::warning(this, "Invalid email or phone number", "Please insert an email or phone number.", QMessageBox::Ok);
     }
