@@ -9,7 +9,7 @@
 
 # Documentation
 
-[Link to the documentation](https://drive.google.com/file/d/17jeCqxTvaB1OSJUxGP67KoKF91RM61Yt/view?usp=sharing)
+[Link to the documentation](https://drive.google.com/file/d/1E31s67fiugHbcaBwhKcDU4GupqrkQlnd/view?usp=sharing)
 
 # Demo
 
